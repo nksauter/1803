@@ -9,8 +9,8 @@ from scitbx.array_family import flex
 from scitbx import fftpack
 from numpy import fft
 
-def load_fft():
-  with mrcfile.open(sys.argv[1]) as mrc:
+def load_fft(filename):
+  with mrcfile.open(filename) as mrc:
     # coerce to double
     realpart = flex.double(mrc.data.astype(np.float64))
     complpart = flex.double(flex.grid(realpart.focus()))
@@ -67,7 +67,7 @@ def make_images(data, tag):
       FormatCBFMini.as_file(detector,beam,None,None,data_slice,filename)
 
 if __name__=="__main__":
-  fft_flex = load_fft()
+  fft_flex = load_fft(sys.argv[1])
   for tag, dataset in zip(['I', 'phase'], get_intensity_and_phase(fft_flex)):
     make_images(dataset, tag)
   print "Done"
